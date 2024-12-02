@@ -1,0 +1,877 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<helpItems xmlns="http://msh" schema="maml">
+
+  <!-- New-SfClient -->
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10">
+
+    <command:details>
+      <command:name>New-SfClient</command:name>
+      <maml:description>
+        <maml:para>Creates a new ShareFile API Client</maml:para>
+      </maml:description>
+      <maml:copyright>
+        <maml:para></maml:para>
+      </maml:copyright>
+      <command:verb>New</command:verb>
+      <command:noun>SfClient</command:noun>
+      <dev:version></dev:version>
+    </command:details>
+
+    <maml:description>
+      <maml:para>Creates a new ShareFile API Client. The API Client handles the initial handshake with ShareFile API, and is required to use the other Cmdlets and providers in this SnapIn.</maml:para>
+      <maml:para>During creation, a Web pop-up login page is displayed, which will capture your authentication and Account selection (if your email is associated with multiple ShareFile accounts).</maml:para>
+      <maml:para>You may use the -Name parameter to save this authentication state - your username/password is not saved, only an OAuth token for that account. If you save the authentication state, then you can retrieve the ShareFile API Client later using Get-SfClient -Name "name"</maml:para>
+    </maml:description>
+
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-SfClient</maml:name>
+        <command:parameter required="false" position="0">
+          <maml:name>Name</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="1">
+          <maml:name>Account</maml:name>
+          <maml:description>
+            <maml:para></maml:para>
+          </maml:description>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="2">
+          <maml:name>Domain</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Credential</maml:name>
+          <maml:description/>
+          <command:parameterValue>PSCredential</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+
+    <command:parameters>
+      <command:parameter required="false" position="0">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Name of file that will contain the authentication state for this client, allowing it to be retrieved using Get-SfClient.</maml:para>
+          <maml:para>By default, the file is created in .\"name".sfps</maml:para>
+          <maml:para>You may also provide a full path instead of simple string.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="1">
+        <maml:name>Account</maml:name>
+        <maml:description>
+          <maml:para>Defines the default ShareFile account - or subdomain. Account/Subdomain is the identifier you use while accessing sharefile</maml:para>
+          <maml:para>For example, if you use acme.sharefile.com to login, then "acme" represents the Account identifier.</maml:para>
+          <maml:para>If not provided, the web dialog will present a list of accounts for you to pick, based on the provided username/password.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Defines an alternate domain for the client. By default, API requests go to sf-api.com.</maml:para>
+          <maml:para>You may use this parameter to access other control planes, such as sf-api.eu; or sf-apitest.com</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Username and password for authentication. It must be used with the -Account parameter. Use Get-Credential to create a credential object.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">PSCredential</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+    </command:parameters>
+
+    <!--<command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>Type name.</maml:name>
+          <maml:uri/>
+          <maml:description>
+            <maml:para>Description of type.</maml:para>
+          </maml:description>
+        </dev:type>
+      </command:inputType>
+    </command:inputTypes>-->
+
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>PSShareFileClient</maml:name>
+          <maml:uri />
+          <maml:description>
+            <maml:para>
+              A ShareFile API client; to be used by the other commands and providers in this SnapIn.
+            </maml:para>
+          </maml:description>
+        </dev:type>
+      </command:returnValue>
+    </command:returnValues>
+
+    <command:terminatingErrors />
+
+    <command:nonTerminatingErrors />
+
+    <maml:alertSet>
+      <!--<maml:title></maml:title>
+      <maml:alert>
+        <maml:para>Add content for Remark1.</maml:para>
+      </maml:alert>
+      <maml:alert>
+        <maml:para>Add content for Remark2.</maml:para>
+      </maml:alert>-->
+    </maml:alertSet>
+
+    <command:examples>
+      
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 1 ------------------------
+Authenticate to ShareFile</maml:title>
+        <maml:introduction/>
+        <dev:code>
+$client = New-SfClient -Name acme
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Launches the web authentication flow. After authentication, the client state is saved in acme.sfps.</maml:para>
+        </dev:remarks>
+      </command:example>
+
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 2 ------------------------
+Authenticate to ShareFile using username/password credentials</maml:title>
+        <maml:introduction/>
+        <dev:code>
+$cred = Get-Credential
+$client = New-SfClient -Name acme -Account acme -Credential $cred
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Launches the web authentication flow. After authentication, the client state is saved in acme.sfps.</maml:para>
+        </dev:remarks>
+      </command:example>
+
+    <command:example>
+      <maml:title>------------------------ EXAMPLE 3 ------------------------
+Create a PS Drive for your ShareFile Account</maml:title>
+      <maml:introduction/>
+      <dev:code>
+$client = New-SfClient -Name acme 
+New-PsDrive -Name sf -PSProvider ShareFile -Root / -Client $client
+Get-ChildItem -Path sf:/
+      </dev:code>
+      <dev:remarks>
+        <maml:para>Mounts the root of your ShareFile account as a Powershell Drive. You may use it to navigate your account, and copy files to/from using Copy-SfItem.</maml:para>
+      </dev:remarks>
+    </command:example>
+      
+    </command:examples>
+
+    <maml:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-SfClient</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PSDrive</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+    </maml:relatedLinks>
+  </command:command>
+
+  <!-- Get-SfClient -->
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10">
+
+    <command:details>
+      <command:name>Get-SfClient</command:name>
+      <maml:description>
+        <maml:para>Retrieve a ShareFile API Client from a saved authentication state</maml:para>
+      </maml:description>
+      <maml:copyright>
+        <maml:para></maml:para>
+      </maml:copyright>
+      <command:verb>Get</command:verb>
+      <command:noun>SfClient</command:noun>
+      <dev:version></dev:version>
+    </command:details>
+
+    <maml:description>
+      <maml:para>Retrieve a previously saved ShareFile API Client. New-SfClient command allows saving your OAuth credentials in the filesystem, if you provide a -Name parameter to that command.</maml:para>
+      <maml:para>Use Get-SfClient to create a PSShareFileClient based on that authentication state file. </maml:para>
+      <maml:para>This command may launch the Web authentication flow if the saved OAuth refresh token is expired. </maml:para>
+    </maml:description>
+
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-SfClient</maml:name>
+        <command:parameter required="true" position="0">
+          <maml:name>Name</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+
+    <command:parameters>
+      <command:parameter required="false" position="0">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Name of file that will contain the authentication state for this client, allowing it to be retrieved using Get-SfClient.</maml:para>
+          <maml:para>By default, Get-SfClient will look for .\"name".sfps</maml:para>
+          <maml:para>You may also provide a full path instead of simple string.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+      
+    </command:parameters>
+
+    <!--<command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>Type name.</maml:name>
+          <maml:uri/>
+          <maml:description>
+            <maml:para>Description of type.</maml:para>
+          </maml:description>
+        </dev:type>
+      </command:inputType>
+    </command:inputTypes>-->
+
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>PSShareFileClient</maml:name>
+          <maml:uri />
+          <maml:description>
+            <maml:para>
+              A ShareFile API client; to be used by the other commands and providers in this SnapIn.
+            </maml:para>
+          </maml:description>
+        </dev:type>
+      </command:returnValue>
+    </command:returnValues>
+
+    <command:terminatingErrors />
+
+    <command:nonTerminatingErrors />
+
+    <maml:alertSet>
+      <!--<maml:title></maml:title>
+      <maml:alert>
+        <maml:para>Add content for Remark1.</maml:para>
+      </maml:alert>
+      <maml:alert>
+        <maml:para>Add content for Remark2.</maml:para>
+      </maml:alert>-->
+    </maml:alertSet>
+
+    <command:examples>
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 1 ------------------------
+Retrieve a previously saved authentication state</maml:title>
+        <maml:introduction/>
+        <dev:code>
+          $client = Get-SfClient -Name acme
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Attempts to load .\acme.sfps, and use the saved OAuth credentials to login to ShareFile. </maml:para>
+        </dev:remarks>
+      </command:example>
+
+    </command:examples>
+
+    <maml:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-SfClient</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PSDrive</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+    </maml:relatedLinks>
+  </command:command>
+
+  <!-- Send-SfRequest -->
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10">
+
+    <command:details>
+      <command:name>Send-SfRequest</command:name>
+      <maml:description>
+        <maml:para>Issues a generic API request to ShareFile</maml:para>
+      </maml:description>
+      <maml:copyright>
+        <maml:para></maml:para>
+      </maml:copyright>
+      <command:verb>Send</command:verb>
+      <command:noun>SfRequest</command:noun>
+      <dev:version></dev:version>
+    </command:details>
+
+    <maml:description>
+      <maml:para>Sends a generic API request to a ShareFile API provider.</maml:para>
+      <maml:para>ShareFile APIs are based on a RESTful standard. API Elements are always desribed as https://Account.Domain/Provider/Version/Entity(id)/Navigation(id)/Navigation(id) </maml:para>
+      <maml:para>This Command exposes the parts of the ShareFile URL, as well as the HTTP Verb, Actions, HTTP Body, and optional parameters. </maml:para>
+      <maml:para>You may also use a Uri parameter instead of providing its parts.</maml:para>
+      <maml:para>Visit http://api.sharefile.com for a complete list of API definitions that can be used with this command.</maml:para>
+      <maml:para>For Upload and Download operations, use the PSProvider ShareFile, as described in New-SfClient Examples.</maml:para>
+    </maml:description>
+
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Send-SfRequest</maml:name>
+        <command:parameter required="true" position="0">
+          <maml:name>Client</maml:name>
+          <maml:description/>
+          <command:parameterValue>PSShareFileClient</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="true" position="1">
+          <maml:name>Verb</maml:name>
+          <maml:description>
+            <maml:para></maml:para>
+          </maml:description>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="2">
+          <maml:name>Uri</maml:name>
+          <maml:description/>
+          <command:parameterValue>Uri</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Entity</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Id</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Body</maml:name>
+          <maml:description/>
+          <command:parameterValue>ShareFile.Api.Models.ODataObject</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Action</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Navigation</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Parameters</maml:name>
+          <maml:description/>
+          <command:parameterValue>Dictionary</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Expand</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Select</maml:name>
+          <maml:description/>
+          <command:parameterValue>string</command:parameterValue>
+        </command:parameter>
+
+      </command:syntaxItem>
+      
+    </command:syntax>
+
+    <command:parameters>
+      <command:parameter required="true" position="0">
+        <maml:name>Client</maml:name>
+        <maml:description>
+          <maml:para>ShareFile API Client, created by New-SfClient or Get-SfClient commands.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">PSShareFileClient</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="1">
+        <maml:name>Verb</maml:name>
+        <maml:description>
+          <maml:para>The HTTP Verb used in the operation: GET, POST, PATCH, PUT or  DELETE.</maml:para>
+          <maml:para>GET retrieves elements, and do not perform changes in the API server.</maml:para>
+          <maml:para>POST create new elements or relationships. Most POST operations require a Body, which are generally classes of ShareFile.Api.Models namespace (see examples)</maml:para>
+          <maml:para>PUT replaces the current element with a new set of values - most ShareFile Entities do not support this Verb - use PATCH by default instead</maml:para>
+          <maml:para>PATCH replaces the attribute values provided in the request Body, but leave unspecified attributes unchanged.</maml:para>
+          <maml:para>DELETE removes the Entity</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Uri</maml:name>
+        <maml:description>
+          <maml:para>Uri defines the RESTful request Uri. If used, it overrides the paramters Entity, Id, Navigation, Action, Parameters, Select, and Expand (see examples).</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">Uri</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Entity</maml:name>
+        <maml:description>
+          <maml:para>Defines the Class you want to manage in ShareFile, for example, Items, Users, Accounts, Sessions. </maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>Defines the target Entity Id. Some Entities have a default element if Id is not provided; for example, -Entity Users will retrieve the current authenticated user if Id is not provided.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Action</maml:name>
+        <maml:description>
+          <maml:para>Specify an Action on the target element. For example, -Entity Items -Id itemid -Action Copy</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Navigation</maml:name>
+        <maml:description>
+          <maml:para>Navigation Property of the target element. For example, -Entity Items -Id itemid -Navigation Children</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Cast</maml:name>
+        <maml:description>
+          <maml:para>Type Cast is requried for certain POST (Create) operations, when the target Entity has sub-types. The important examples in ShareFile are Items: Cast can be Folder, SymbolicLink, Note or Link; and Users: Cast can be User or AccountUser.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Body</maml:name>
+        <maml:description>
+          <maml:para>Request Body for the operation. The request body is usually a single or a list of ShareFile.Api.Model objects. (see examples).</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">ShareFile.Api.Models.ODataObject</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Parameters</maml:name>
+        <maml:description>
+          <maml:para>List of parameters in the Uri. For example, -Verb post -Entity Items -Id itemid -Action COpy -Parameters @{ "overwrite"="true","targetid"="id" }</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">Dictionary</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Select</maml:name>
+        <maml:description>
+          <maml:para>Comma-delimited list of attributes to be retrieved in the GET operation. A Select attribute limits the size of the response object, and therefore makes the operation faster.</maml:para>
+          <maml:para>You can use in conjunction with Expand to retrieve attributes of navigation properties as well; for example -Expand Children -Select "Id,Children/Id" </maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="named">
+        <maml:name>Expand</maml:name>
+        <maml:description>
+          <maml:para>Comma-delimited list of navigation parameters to be retrieved in the GET operation.</maml:para>
+          <maml:para>If you are interested in </maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+    </command:parameters>
+
+    <!--<command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>Type name.</maml:name>
+          <maml:uri/>
+          <maml:description>
+            <maml:para>Description of type.</maml:para>
+          </maml:description>
+        </dev:type>
+      </command:inputType>
+    </command:inputTypes>-->
+
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>ShareFile.Api.Models.ODataObject</maml:name>
+          <maml:uri />
+          <maml:description>
+            <maml:para>
+              All API responses are deserialized into ShareFile.Api.Model classes, sub-types of ShareFile.Api.Models.ODataObject.
+            </maml:para>
+          </maml:description>
+        </dev:type>
+      </command:returnValue>
+    </command:returnValues>
+
+    <command:terminatingErrors />
+
+    <command:nonTerminatingErrors />
+
+    <maml:alertSet>
+      <!--<maml:title></maml:title>
+      <maml:alert>
+        <maml:para>Add content for Remark1.</maml:para>
+      </maml:alert>
+      <maml:alert>
+        <maml:para>Add content for Remark2.</maml:para>
+      </maml:alert>-->
+    </maml:alertSet>
+
+    <command:examples>
+
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 1 ------------------------
+Retrieve the current user
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+$client = New-SfClient -Name acme
+Send-SfRequest -Client $c -Verb GET -Entity Users
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Return a ShareFile.Api.Models.User object containing attributes of the current user</maml:para>
+        </dev:remarks>
+      </command:example>
+
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 2 ------------------------
+Retrieve a navigation property
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+Send-SfRequest -Client $c -Verb GET -Entity Items -Id allshared -Navigation Children 
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Returns a list of Models.Item objects, representing the children of the "allshared" folder (top-level folders for the account)</maml:para>
+        </dev:remarks>
+      </command:example>
+
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 3 ------------------------
+Create a new object
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+$folder = New-Object ShareFile.Api.Models.Folder
+$folder.Name = "Example Folder"
+$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
+Send-SfRequest -Client $c -Verb POST -Uri $homeFolder.url -Body $folder -Cast Folder -Parameters @{ "overwrite"="true" }
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves the current user home folder using the HomeFolder navigation property; then creates a new folder under that.</maml:para>
+        </dev:remarks>
+      </command:example>
+
+      <command:example>
+        <maml:title>------------------------ EXAMPLE 4 ------------------------
+Updates an object
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+$folderUpdate = New-Object ShareFile.Api.Models.Folder
+$folder.Name = "Example Folder 2"
+$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
+$folderTarget = Send-SfRequest -Client $c -Verb GET -Uri $homeFolder.url -Action ByPath -Parameters @{ "path"="/Example Folder" }
+Send-SfRequest -Client $c -Verb PATCH -Uri $folderTarget.url -Body $folderUpdate 
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Updates the element created in Example 3: retrieves the current user home folder; then finds a named folder under that element using the ByPath action. Then sends an update request to the retrieved folder.</maml:para>
+        </dev:remarks>
+      </command:example>
+
+      <command:example>
+        <maml:title>
+          ------------------------ EXAMPLE 5 ------------------------
+          Deletes an object
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+          $homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
+          $folderTarget = Send-SfRequest -Client $c -Verb GET -Uri $homeFolder.url -Action ByPath -Parameters @{ "path"="/Example Folder" }
+          Send-SfRequest -Client $c -Verb DELETE -Uri $folderTarget.url 
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Deletes the element created in Example 3: retrieves the current user home folder; then finds a named folder under that element using the ByPath action. Then sends the delete request to the retrieved folder.</maml:para>
+        </dev:remarks>
+      </command:example>
+
+    </command:examples>
+
+    <maml:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-SfClient</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PSDrive</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+    </maml:relatedLinks>
+  </command:command>
+
+  <!-- Copy-SfItem -->
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10">
+
+    <command:details>
+      <command:name>Copy-SfItem</command:name>
+      <maml:description>
+        <maml:para>Copy items to/from ShareFile PSProvider and other providers</maml:para>
+      </maml:description>
+      <maml:copyright>
+        <maml:para></maml:para>
+      </maml:copyright>
+      <command:verb>Copy</command:verb>
+      <command:noun>SfClient</command:noun>
+      <dev:version></dev:version>
+    </command:details>
+
+    <maml:description>
+      <maml:para>Copies items from or to a ShareFile PSProvider.</maml:para>
+      <maml:para>This command also supports copying files from one ShareFile folder to another - which is accomplished without downloading the items; or copying files to/from the local file system.</maml:para>
+    </maml:description>
+
+    <command:syntax>
+      
+      <command:syntaxItem>
+        
+        <maml:name>Copy-SfItem</maml:name>
+        
+        <command:parameter required="true" position="0">
+          <maml:name>Path</maml:name>
+          <maml:description/>
+          <command:parameterValue>PSPath</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="1">
+          <maml:name>Destination</maml:name>
+          <maml:description/>
+          <command:parameterValue>PSPath</command:parameterValue>
+        </command:parameter>
+
+        <command:parameter required="false" position="named">
+          <maml:name>Force</maml:name>
+          <maml:description/>
+          <command:parameterValue>Boolean</command:parameterValue>
+        </command:parameter>
+        
+      </command:syntaxItem>
+      
+    </command:syntax>
+
+    <command:parameters>
+      
+      <command:parameter required="true" position="0">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Source items</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+      <command:parameter required="false" position="1">
+        <maml:name>Destination</maml:name>
+        <maml:description>
+          <maml:para>Destination folder. Defaults to current location.</maml:para>
+        </maml:description>
+        <command:parametervalue required="true">string</command:parametervalue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri/>
+        </dev:type>
+        <dev:defaultvalue></dev:defaultvalue>
+      </command:parameter>
+
+    </command:parameters>
+
+    <!--<command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>Type name.</maml:name>
+          <maml:uri/>
+          <maml:description>
+            <maml:para>Description of type.</maml:para>
+          </maml:description>
+        </dev:type>
+      </command:inputType>
+    </command:inputTypes>-->
+
+    <!--<command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>PSShareFileClient</maml:name>
+          <maml:uri />
+          <maml:description>
+            <maml:para>
+              A ShareFile API client; to be used by the other commands and providers in this SnapIn.
+            </maml:para>
+          </maml:description>
+        </dev:type>
+      </command:returnValue>
+    </command:returnValues>-->
+
+    <command:terminatingErrors />
+
+    <command:nonTerminatingErrors />
+
+    <maml:alertSet>
+      <!--<maml:title></maml:title>
+      <maml:alert>
+        <maml:para>Add content for Remark1.</maml:para>
+      </maml:alert>
+      <maml:alert>
+        <maml:para>Add content for Remark2.</maml:para>
+      </maml:alert>-->
+    </maml:alertSet>
+
+    <command:examples>
+      <command:example>
+        <maml:title>
+          ------------------------ EXAMPLE 1 ------------------------
+          Retrieve a previously saved authentication state
+        </maml:title>
+        <maml:introduction/>
+        <dev:code>
+          $client = Get-SfClient -Name acme
+        </dev:code>
+        <dev:remarks>
+          <maml:para>Attempts to load .\acme.sfps, and use the saved OAuth credentials to login to ShareFile. </maml:para>
+        </dev:remarks>
+      </command:example>
+
+    </command:examples>
+
+    <maml:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-SfClient</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-PSDrive</maml:linkText>
+        <maml:uri/>
+      </maml:navigationLink>
+    </maml:relatedLinks>
+  </command:command>
+
+</helpItems>

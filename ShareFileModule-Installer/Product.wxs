@@ -1,0 +1,196 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<?include Globals.wxi ?>
+	<Package Name="ShareFile PowerShell Modules"
+		 Version="$(var.Version)"
+		 Manufacturer="Progress ShareFile"
+		 UpgradeCode="4cfa2b87-6281-4e66-b398-d7b890f9ca0c"
+		 Compressed="yes"
+		 InstallerVersion="500"
+		 Scope="perMachine" >
+
+		<?if $(var.Platform) = x64 ?>
+		<Launch Condition="VersionNT64" Message="Please run 32-bit installer." />
+		<?endif?>
+		<?if $(var.Platform) = x86 ?>
+		<Launch Condition="NOT VersionNT64" Message="Please run 64-bit installer" />
+		<?endif?>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLDIR" />
+
+		<Feature Id="ProductFeature" Title="ShareFilePowerShellModules" Level="1">
+			<ComponentGroupRef Id="NetFrameworkComponents" />
+			<ComponentGroupRef Id="NetCoreComponents" />
+		</Feature>
+
+		<Icon Id="ShareFileIcon.ico" SourceFile="$(var.SourcePathAssets)\sf-icon.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="ShareFileIcon.ico" />
+
+		<PropertyRef Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED"/>
+		<Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="This setup requires Microsoft .NET Framework 4.8 package or greater to be installed for this installation to continue." />
+
+		<PropertyRef Id="POWERSHELL3VERSION" />
+		<Launch Condition="Installed OR (POWERSHELL3VERSION >= &quot;5.0&quot;)" Message="Installing [ProductName] requires PowerShell Version 5.0 or later." />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.SourcePathAssets)\Citrix EULA.rtf" />
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.SourcePathAssets)\branding.jpg" />
+
+		<Property Id="POWERSHELL3VERSION" Secure="yes">
+			<RegistrySearch Id="PowerShell3VersionSearch"
+							Key="SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine"
+							Name="PowerShellVersion"
+							Root="HKLM"
+							Type="raw" />
+		</Property>
+
+		<StandardDirectory Id="ProgramFiles6432Folder">
+			<Directory Id="ShareFile" Name="ShareFile">
+				<Directory Id="INSTALLDIR" Name="PowerShell Modules">
+					<Directory Id="FrameworkModule" Name="ShareFile">
+						<Directory Id="WebView2Runtimes" Name="runtimes">
+							<Directory Id="win_arm64" Name="win-arm64">
+								<Directory Id="win_arm64_native" Name="native"/>
+							</Directory>
+							<Directory Id="win_x64" Name="win-x64">
+								<Directory Id="win_x64_native" Name="native"/>
+							</Directory>
+							<Directory Id="win_x86" Name="win-x86">
+								<Directory Id="win_x86_native" Name="native"/>
+							</Directory>
+						</Directory>
+					</Directory>
+					<Directory Id="CoreModule" Name="ShareFile-Core">
+						<Directory Id="Core_WebView2Runtimes" Name="runtimes">
+							<Directory Id="Core_win_arm64" Name="win-arm64">
+								<Directory Id="Core_win_arm64_native" Name="native"/>
+							</Directory>
+							<Directory Id="Core_win_x64" Name="win-x64">
+								<Directory Id="Core_win_x64_native" Name="native"/>
+							</Directory>
+							<Directory Id="Core_win_x86" Name="win-x86">
+								<Directory Id="Core_win_x86_native" Name="native"/>
+							</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</StandardDirectory>
+
+		<ComponentGroup Id="NetFrameworkComponents" Directory="FrameworkModule">
+			<Component>
+				<File Id="ShareFileModule.dll" Source="$(var.SourceRootPath)\ShareFileModule.dll"/>
+				<Environment Id="PSModulePath"
+							 Name="PSModulePath"
+							 Value="[INSTALLDIR]"
+							 Permanent="no"
+				             Part="last"
+							 Action="set"
+							 System="yes"/>
+			</Component>
+			<Component>
+				<File Id="ShareFile.psd1" Source="$(var.SourceRootPath)\ShareFile.psd1"/>
+			</Component>
+			<Component>
+				<File Id="ShareFile.Format.ps1xml" Source="$(var.SourceRootPath)\ShareFile.Format.ps1xml"/>
+			</Component>
+			<Component>
+				<File Id="ShareFile.Api.Client.dll" Source="$(var.SourceRootPath)\ShareFile.Api.Client.dll"/>
+			</Component>
+			<Component>
+				<File Id="Newtonsoft.Json.dll" Source="$(var.SourceRootPath)\Newtonsoft.Json.dll"/>
+			</Component>
+			<Component>
+				<File Id="NLog.dll" Source="$(var.SourceRootPath)\NLog.dll"/>
+			</Component>
+			<Component>
+				<File Id="NLog.config" Source="$(var.SourceRootPath)\NLog.config"/>
+			</Component>
+			<ComponentGroupRef Id="WebView2"/>
+		</ComponentGroup>
+
+		<ComponentGroup Id="WebView2" Directory="FrameworkModule">
+			<Component>
+				<File Id="Microsoft.Web.WebView2.Core.dll" Source="$(var.SourceRootPath)\Microsoft.Web.WebView2.Core.dll"/>
+			</Component>
+			<Component>
+				<File Id="Microsoft.Web.WebView2.WinForms.dll" Source="$(var.SourceRootPath)\Microsoft.Web.WebView2.WinForms.dll"/>
+			</Component>
+			<Component>
+				<File Id="Microsoft.Web.WebView2.Wpf.dll" Source="$(var.SourceRootPath)\Microsoft.Web.WebView2.Wpf.dll"/>
+			</Component>
+			<Component Directory="win_x86_native">
+				<File Id="WebView2Loader.dll.x86" Source="$(var.SourceRootPath)\runtimes\win-x86\native\WebView2Loader.dll"/>
+			</Component>
+			<Component Directory="win_x64_native">
+				<File Id="WebView2Loader.dll.x64" Source="$(var.SourceRootPath)\runtimes\win-x64\native\WebView2Loader.dll"/>
+			</Component>
+			<Component Directory="win_arm64_native">
+				<File Id="WebView2Loader.dll.arm64" Source="$(var.SourceRootPath)\runtimes\win-arm64\native\WebView2Loader.dll"/>
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="NetCoreComponents" Directory="CoreModule">
+			<Component>
+				<File Id="Core_ShareFileModule.dll" Source="$(var.SourceRootPathCore)\ShareFileModule.dll"/>
+			</Component>
+			<Component>
+				<File Id="ShareFile_Core.psd1" Source="$(var.SourceRootPathCore)\ShareFile-Core.psd1"/>
+			</Component>
+			<Component>
+				<File Id="Core_ShareFile.Format.ps1xml" Source="$(var.SourceRootPathCore)\ShareFile.Format.ps1xml"/>
+			</Component>
+			<Component>
+				<File Id="Core_ShareFile.Api.Client.dll" Source="$(var.SourceRootPathCore)\ShareFile.Api.Client.dll"/>
+			</Component>
+			<Component>
+				<File Id="Core_Newtonsoft.Json.dll" Source="$(var.SourceRootPathCore)\Newtonsoft.Json.dll"/>
+			</Component>
+			<Component>
+				<File Id="Core_NLog.dll" Source="$(var.SourceRootPathCore)\NLog.dll"/>
+			</Component>
+			<Component>
+				<File Id="Core_NLog.config" Source="$(var.SourceRootPathCore)\NLog.config"/>
+			</Component>
+			<Component>
+				<File Id="Microsoft.ApplicationInsights.dll" Source="$(var.SourceRootPathCore)\Microsoft.ApplicationInsights.dll"/>
+			</Component>
+			<Component>
+				<File Id="System.Configuration.ConfigurationManager.dll" Source="$(var.SourceRootPathCore)\System.Configuration.ConfigurationManager.dll"/>
+			</Component>
+			<Component>
+				<File Id="System.Diagnostics.EventLog.dll" Source="$(var.SourceRootPathCore)\System.Diagnostics.EventLog.dll"/>
+			</Component>
+			<Component>
+				<File Id="System.Management.dll" Source="$(var.SourceRootPathCore)\System.Management.dll"/>
+			</Component>
+			<Component>
+				<File Id="System.Security.Cryptography.Pkcs.dll" Source="$(var.SourceRootPathCore)\System.Security.Cryptography.Pkcs.dll"/>
+			</Component>
+			<ComponentGroupRef Id="Core_WebView2"/>
+		</ComponentGroup>
+
+		<ComponentGroup Id="Core_WebView2" Directory="CoreModule">
+			<Component>
+				<File Id="Core_Microsoft.Web.WebView2.Core.dll" Source="$(var.SourceRootPathCore)\Microsoft.Web.WebView2.Core.dll"/>
+			</Component>
+			<Component>
+				<File Id="Core_Microsoft.Web.WebView2.WinForms.dll" Source="$(var.SourceRootPathCore)\Microsoft.Web.WebView2.WinForms.dll"/>
+			</Component>
+			<Component>
+				<File Id="Core_Microsoft.Web.WebView2.Wpf.dll" Source="$(var.SourceRootPathCore)\Microsoft.Web.WebView2.Wpf.dll"/>
+			</Component>
+			<Component Directory="Core_win_x86_native">
+				<File Id="Core_WebView2Loader.dll.x86" Source="$(var.SourceRootPathCore)\runtimes\win-x86\native\WebView2Loader.dll"/>
+			</Component>
+			<Component Directory="Core_win_x64_native">
+				<File Id="Core_WebView2Loader.dll.x64" Source="$(var.SourceRootPathCore)\runtimes\win-x64\native\WebView2Loader.dll"/>
+			</Component>
+			<Component Directory="Core_win_arm64_native">
+				<File Id="Core_WebView2Loader.dll.arm64" Source="$(var.SourceRootPathCore)\runtimes\win-arm64\native\WebView2Loader.dll"/>
+			</Component>
+		</ComponentGroup>
+	</Package>
+</Wix>

@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>ShareFile.Api.Powershell</RootNamespace>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <AssemblyTitle>ShareFileModule</AssemblyTitle>
+    <Product>ShareFileModule</Product>
+    <Copyright>Copyright © 2024 Progress</Copyright>
+    <Deterministic>false</Deterministic>
+    <AssemblyVersion>1.0.*</AssemblyVersion>
+    <FileVersion>1.0.*</FileVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+	<!-- For Dispatcher found in System.Windows.Threading -->
+	<UseWPF>true</UseWPF>
+  </PropertyGroup> 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="ShareFile.Api.Client" Version="4.0.200" />
+    <PackageReference Include="System.Buffers" Version="4.4.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.Management.Automation" Version="6.1.7601.17515" Condition="'$(TargetFramework)' == 'net48'" />
+	<PackageReference Include="System.Management.Automation" Version="7.4.6" Condition="'$(TargetFramework)' != 'net48'" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Browser\BasicAuthDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Browser\BasicAuthDialog.Designer.cs">
+      <DependentUpon>BasicAuthDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Browser\OAuthAuthenticationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Browser\OAuthAuthenticationForm.Designer.cs">
+      <DependentUpon>OAuthAuthenticationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\branding.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\sf-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Assets\Citrix EULA.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ShareFile.Format.ps1xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Browser\BasicAuthDialog.resx">
+      <DependentUpon>BasicAuthDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Browser\OAuthAuthenticationForm.resx">
+      <DependentUpon>OAuthAuthenticationForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ShareFileSnapIn.dll-Help.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ContentWithTargetPath Include="Manifests\ShareFile-Core.psd1" Condition="'$(TargetFramework)' != 'net48'">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>ShareFile-Core.psd1</TargetPath>
+	</ContentWithTargetPath>
+	<ContentWithTargetPath Include="Manifests\ShareFile.psd1" Condition="'$(TargetFramework)' == 'net48'">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>ShareFile.psd1</TargetPath>
+	</ContentWithTargetPath>
+    <None Include="Manifests\ShareFile-Core.psd1"/>
+    <None Include="Manifests\ShareFile.psd1"/>
+  </ItemGroup>
+</Project>
