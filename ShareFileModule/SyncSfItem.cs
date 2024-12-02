@@ -621,7 +621,7 @@ namespace ShareFile.Api.Powershell
                         {
                             if (e.Code != System.Net.HttpStatusCode.NotFound)
                             {
-                                throw e;
+                                throw;
                             }
                         }
 

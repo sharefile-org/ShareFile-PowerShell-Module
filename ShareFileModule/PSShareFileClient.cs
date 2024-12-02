@@ -116,7 +116,7 @@ namespace ShareFile.Api.Powershell
             {
 
                 body.Write(
-                    Uri.EscapeUriString(string.Format("grant_type=password&client_id={0}&client_secret={1}&username={2}&password={3}",
+                    Uri.EscapeDataString(string.Format("grant_type=password&client_id={0}&client_secret={1}&username={2}&password={3}",
                     Resources.ClientId,
                     Resources.ClientSecret,
                     username,
@@ -207,7 +207,7 @@ namespace ShareFile.Api.Powershell
             {
                 var authDomain = new AuthenticationDomain() { Uri = redirection.SessionUri.ToString() };
                 authDomain = this.AuthenticateForms(authDomain,
-                    new Uri(string.Format("{0}?root={1}&redirect_url={2}", redirection.FormsUri, redirection.Root, Uri.EscapeUriString(Resources.RedirectURL))),
+                    new Uri(string.Format("{0}?root={1}&redirect_url={2}", redirection.FormsUri, redirection.Root, Uri.EscapeDataString(Resources.RedirectURL))),
                     redirection.TokenUri,
                     redirection.Root);
                 if (authDomain.OAuthToken == null)
@@ -465,8 +465,8 @@ namespace ShareFile.Api.Powershell
                         _requestDomain.Domain,
                         Resources.ClientId,
                         _requestDomain.Account != null && !_requestDomain.Account.Equals("secure") ? "&subdomain=" + _requestDomain.Account : "",
-                        _requestDomain.Username != null ? "&username=" + Uri.EscapeUriString(_requestDomain.Username) : "",
-                        Uri.EscapeUriString(Resources.RedirectURL)));
+                        _requestDomain.Username != null ? "&username=" + Uri.EscapeDataString(_requestDomain.Username) : "",
+                        Uri.EscapeDataString(Resources.RedirectURL)));
 
                     browser.AddUrlEventHandler(Resources.RedirectURL, uri =>
                     {

@@ -267,7 +267,7 @@ namespace ShareFile.Api.Powershell
             }
             catch (ODataException e)
             {
-                if (e.Code != System.Net.HttpStatusCode.NotFound) throw e;
+                if (e.Code != System.Net.HttpStatusCode.NotFound) throw;
             }
             return default(T);
         }

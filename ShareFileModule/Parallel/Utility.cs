@@ -13,9 +13,9 @@ namespace ShareFile.Api.Powershell.Parallel
         public const string DefaultSharefileFolder = "My Files & Folders";
         #endregion
 
-        public static String GetMD5HashFromFile(Stream file)
+        public static string GetMD5HashFromFile(Stream file)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
+            MD5 md5 = MD5.Create();
             byte[] retVal = md5.ComputeHash(file);
             file.Close();
             StringBuilder sb = new StringBuilder();

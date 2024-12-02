@@ -60,7 +60,7 @@ namespace ShareFile.Api.Powershell.Parallel
             catch (ODataException e) {
                 if (e.Code != System.Net.HttpStatusCode.NotFound)
                 {
-                    throw e;
+                    throw;
                 }
             }
 
