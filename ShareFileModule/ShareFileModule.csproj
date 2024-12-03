@@ -2,12 +2,13 @@
   <PropertyGroup>
     <RootNamespace>ShareFile.Api.Powershell</RootNamespace>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
     <AssemblyTitle>ShareFileModule</AssemblyTitle>
     <Product>ShareFileModule</Product>
-    <Copyright>Copyright © 2024 Progress</Copyright>
+    <Copyright>Copyright © 2025 Progress</Copyright>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.*</AssemblyVersion>
-    <FileVersion>1.0.*</FileVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWindowsForms>true</UseWindowsForms>
 	<!-- For Dispatcher found in System.Windows.Threading -->

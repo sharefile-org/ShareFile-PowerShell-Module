@@ -13,6 +13,9 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
+#if NETFRAMEWORK
+using System.Threading.Tasks;
+#endif
 
 namespace ShareFile.Api.Powershell
 {
@@ -24,6 +27,16 @@ namespace ShareFile.Api.Powershell
     /// </summary>
     public class PSShareFileClient
     {
+        private static readonly HttpClient HttpClient =
+#if NETFRAMEWORK
+            new HttpClient();
+#else
+            new HttpClient(new SocketsHttpHandler
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(15)
+            });
+#endif
+
         public string Path { get; set; }
 
         public ShareFileClient Client { get; set; }
@@ -109,30 +122,23 @@ namespace ShareFile.Api.Powershell
             AuthenticationDomain authDomain = null;
             var accountAndDomain = string.IsNullOrEmpty(account) ? domain : string.Format("{0}.{1}", account, domain);
             var uri = string.Format("https://{0}/oauth/token", accountAndDomain);
-            var request = HttpWebRequest.CreateHttp(uri);
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            using (var body = new StreamWriter(request.GetRequestStream()))
-            {
 
-                body.Write(
-                    Uri.EscapeDataString(string.Format("grant_type=password&client_id={0}&client_secret={1}&username={2}&password={3}",
-                    Resources.ClientId,
-                    Resources.ClientSecret,
-                    username,
-                    password)));
-            }
-            var response = (HttpWebResponse)request.GetResponse();
-            using (var body = new StreamReader(response.GetResponseStream()))
+            using var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new FormUrlEncodedContent(CreatePasswordForm(username, password));
+
+            using var response = SendHttpRequest(request);
+            response.EnsureSuccessStatusCode();
+
+            using (var body = new StreamReader(GetResponseContentStream(response)))
             {
                 var jobj = JsonConvert.DeserializeObject<JObject>(body.ReadToEnd());
                 authDomain = new AuthenticationDomain();
-                authDomain.OAuthToken = jobj["access_token"] != null ? jobj["access_token"].ToString() : null;
-                uri = string.Format("https://{0}/{1}/{2}", accountAndDomain, Resources.ShareFileProvider, Resources.DefaultApiVersion);
-                authDomain.Uri = uri;
-                if (Domains.ContainsKey(authDomain.Uri)) Domains.Remove(authDomain.Uri);
-                Domains.Add(authDomain.Uri, authDomain);
-                if (Client == null) Client = CreateClient(authDomain);
+                authDomain.OAuthToken = jobj["access_token"]?.ToString();
+                authDomain.Uri = $"https://{accountAndDomain}/{Resources.ShareFileProvider}/{Resources.DefaultApiVersion}"; ;
+                Domains[authDomain.Uri] = authDomain;
+
+                Client ??= CreateClient(authDomain);
+
                 var session = Client.Sessions.Get().Execute();
                 authDomain.AuthID = session.Id;
                 this.Save();
@@ -246,10 +252,9 @@ namespace ShareFile.Api.Powershell
                         if (!string.IsNullOrEmpty(Domains[id].OAuthRefreshToken))
                         {
                             var token = GetTokenResponse(
-                                "POST",
-                                string.Format("https://{0}.{1}/oauth/token", Domains[id].Account, Domains[id].Domain),
-                                string.Format("grant_type=refresh_token&redirect_uri={0}&refresh_token={1}&client_id={2}&client_secret={3}",
-                                    Resources.RedirectURL, Domains[id].OAuthRefreshToken, Resources.ClientId, Resources.ClientSecret));
+                                HttpMethod.Post,
+                                $"https://{Domains[id].Account}.{Domains[id].Domain}/oauth/token",
+                                CreateRefreshTokenForm(Domains[id].OAuthRefreshToken));
                             Domains[id].OAuthToken = token.AccessToken;
                             Domains[id].OAuthRefreshToken = token.RefreshToken;
                             Client.AddOAuthCredentials(new Uri(Domains[id].Uri), token.AccessToken);
@@ -406,23 +411,74 @@ namespace ShareFile.Api.Powershell
             return client;
         }
 
-        private OAuthToken GetTokenResponse(string method, string uri, string body)
+        private OAuthToken GetTokenResponse(HttpMethod method, string uri, Dictionary<string, string> formBody)
         {
-            var request = HttpWebRequest.CreateHttp(uri);
-            request.Method = method;
-            if (body != null)
+            using var request = new HttpRequestMessage(method, uri);
+
+            if (formBody?.Count > 0)
             {
-                request.ContentType = "application/x-www-form-urlencoded";
-                using (var writer = new StreamWriter(request.GetRequestStream()))
-                {
-                    writer.Write(body);
-                }
+                request.Content = new FormUrlEncodedContent(formBody);
             }
-            var response = (HttpWebResponse)request.GetResponse();
-            using (var reader = new StreamReader(response.GetResponseStream()))
+
+            using var response = SendHttpRequest(request);
+            response.EnsureSuccessStatusCode();
+            using (var reader = new StreamReader(GetResponseContentStream(response)))
             {
                 return JsonConvert.DeserializeObject<OAuthToken>(reader.ReadToEnd());
             }
+        }
+
+        private static HttpResponseMessage SendHttpRequest(HttpRequestMessage request)
+        {
+#if NETFRAMEWORK
+            return Task.Run(() => HttpClient.SendAsync(request)).GetAwaiter().GetResult();
+#else
+            return HttpClient.Send(request);
+#endif
+        }
+
+        private static Stream GetResponseContentStream(HttpResponseMessage response)
+        {
+#if NETFRAMEWORK
+            return response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+#else
+            return response.Content.ReadAsStream();
+#endif
+        }
+
+        private static Dictionary<string, string> CreateBaseFormDictionary(string grantType)
+            => new Dictionary<string, string>
+            {
+                { "grant_type", grantType },
+                { "client_id", Resources.ClientId },
+                { "client_secret", Resources.ClientSecret },
+            };
+
+        private static Dictionary<string, string> CreatePasswordForm(string userName, string password)
+        {
+            var retVal = CreateBaseFormDictionary("password");
+            retVal["username"] = userName;
+            retVal["password"] = password;
+
+            return retVal;
+        }
+
+        private static Dictionary<string, string> CreateRefreshTokenForm(string refreshToken)
+        {
+            var retVal = CreateBaseFormDictionary("refresh_token");
+            retVal["redirect_uri"] = Resources.RedirectURL;
+            retVal["refresh_token"] = refreshToken;
+
+            return retVal;
+        }
+
+        private static Dictionary<string, string> CreateAuthorizationCodeForm(string code)
+        {
+            var retVal = CreateBaseFormDictionary("authorization_code");
+            retVal["code"] = code;
+            retVal["requirev3"] = "true";
+
+            return retVal;
         }
 
         private class WebDialogThread
@@ -436,13 +492,13 @@ namespace ShareFile.Api.Powershell
                 }
             }
             private AuthenticationDomain _result = null;
-            private AutoResetEvent _waitHandle = new AutoResetEvent(false);
+            private readonly AutoResetEvent _waitHandle = new AutoResetEvent(false);
 
-            private PSShareFileClient _psClient;
-            private AuthenticationDomain _requestDomain;
-            private Uri _formUri;
-            private Uri _tokenUri;
-            private string _root;
+            private readonly PSShareFileClient _psClient;
+            private readonly AuthenticationDomain _requestDomain;
+            private readonly Uri _formUri;
+            private readonly Uri _tokenUri;
+            private readonly string _root;
 
             public WebDialogThread(PSShareFileClient psClient, AuthenticationDomain domain, Uri formUri = null, Uri tokenUri = null, string root = null)
             {
@@ -487,10 +543,9 @@ namespace ShareFile.Api.Powershell
                                 var appCP = query["appcp"];
 
                                 token = _psClient.GetTokenResponse(
-                                    "POST",
-                                    string.Format("https://{0}.{1}/oauth/token", subdomain, appCP),
-                                    string.Format("grant_type=authorization_code&code={0}&client_id={1}&client_secret={2}&requirev3=true", query["code"],
-                                        Resources.ClientId, Resources.ClientSecret));
+                                    HttpMethod.Post,
+                                    $"https://{subdomain}.{appCP}/oauth/token",
+                                    CreateAuthorizationCodeForm(query["code"]));
 
                                 authDomain = new AuthenticationDomain();
                                 authDomain.OAuthToken = token.AccessToken;
@@ -522,10 +577,12 @@ namespace ShareFile.Api.Powershell
                                 var kvpSplit = kvp.Split('=');
                                 if (kvpSplit.Length == 2) query.Add(kvpSplit[0], kvpSplit[1]);
                             }
-                            var request = HttpWebRequest.CreateHttp(_tokenUri.ToString() + string.Format("?root={0}&code={1}", _root, query["code"]));
-                            var response = (HttpWebResponse)request.GetResponse();
+                            using var request = new HttpRequestMessage(HttpMethod.Get, $"{_tokenUri}?root={_root}&code={query["code"]}");
+                            using var response = SendHttpRequest(request);
+                            response.EnsureSuccessStatusCode();
+
                             Session session = null;
-                            using (var reader = new StreamReader(response.GetResponseStream()))
+                            using (var reader = new StreamReader(GetResponseContentStream(response)))
                             {
                                 session = JsonConvert.DeserializeObject<Session>(reader.ReadToEnd());
                             }

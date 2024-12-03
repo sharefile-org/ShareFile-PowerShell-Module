@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-  <?define Version = "1.0.0.0" ?>
+  <?define Version = "1.0.1.0" ?>
   <?define Description = "PowerShell Module for ShareFile API. Version $(var.Version)" ?>
   <?define Vendor = "Progress ShareFile" ?>
   <?define SourceRootPath = "..\ShareFileModule\bin\Release\net48" ?>
