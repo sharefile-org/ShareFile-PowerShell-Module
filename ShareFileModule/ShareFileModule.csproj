@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>ShareFile.Api.Powershell</RootNamespace>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
     <AssemblyTitle>ShareFileModule</AssemblyTitle>
     <Product>ShareFileModule</Product>
     <Copyright>Copyright © 2024 Progress</Copyright>
