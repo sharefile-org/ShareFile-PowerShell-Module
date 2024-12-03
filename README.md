@@ -6,7 +6,7 @@ The ShareFile PowerShell SDK is a PowerShell module that provides support for sa
 <table>
     <tr>
         <td height="69" width="69">
-            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/releases"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/Download.png"/></a>
+            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/releases"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/Download.png"/></a>
         </td>
         <td>
             <b>Download</b><br>
@@ -15,7 +15,7 @@ The ShareFile PowerShell SDK is a PowerShell module that provides support for sa
     </tr>
     <tr>
         <td>
-            <a href="http://msdn.microsoft.com/en-us/library/5a4x27ek(v=vs.110).aspx" target="_blank"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/SystemRequirements.png"/></a>
+            <a href="http://msdn.microsoft.com/en-us/library/5a4x27ek(v=vs.110).aspx" target="_blank"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/SystemRequirements.png"/></a>
         </td>
         <td>
             <b>System Requirements</b><br>
@@ -24,7 +24,7 @@ The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/po
     </tr>
     <tr>
         <td>
-            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/wiki/Getting-Started"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/GettingStarted.png"/></a>
+            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/wiki/Getting-Started"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/GettingStarted.png"/></a>
         </td>
         <td>
             <b>Getting Started</b><br>
@@ -33,7 +33,7 @@ The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/po
     </tr>
     <tr>
         <td>
-            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/wiki/Sample-Scripts"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/SampleScripts.png"/></a>
+            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/wiki/Sample-Scripts"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/SampleScripts.png"/></a>
         </td>
         <td>
             <b>Sample Scripts</b><br>
@@ -42,7 +42,7 @@ The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/po
     </tr>
     <tr>
         <td>
-            <a href="Scheduling-Scripts"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Modulel/blob/master/Samples/Images/ScheduleScript.png"/></a>
+            <a href="Scheduling-Scripts"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/ScheduleScript.png"/></a>
         </td>
         <td>
             <b>Scheduling Scripts</b><br>
@@ -51,7 +51,7 @@ The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/po
     </tr>
     <tr>
         <td>
-            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Modulel/wiki/Syncing-Files"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/SyncingFiles.png"/></a>
+            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Modulel/wiki/Syncing-Files"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/SyncingFiles.png"/></a>
         </td>
         <td>
             <b>Syncing Files</b><br>
@@ -60,11 +60,11 @@ The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/po
     </tr>
     <tr>
         <td>
-            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/LICENSE"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/Samples/Images/Agreement.png"/></a>
+            <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/LICENSE"><img src="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/Samples/Images/Agreement.png"/></a>
         </td>
         <td>
             <b>License</b><br>
-            All code is licensed under the <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/master/LICENSE">MIT
+            All code is licensed under the <a href="https://github.com/sharefile-org/ShareFile-PowerShell-Module/blob/main/LICENSE">MIT
 License</a>
         </td>
     </tr>
