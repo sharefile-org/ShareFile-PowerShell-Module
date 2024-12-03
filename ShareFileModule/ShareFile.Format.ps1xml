@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>FolderTableView</Name>
+      <ViewSelectedBy>
+        <TypeName>ShareFile.Api.Models.Item</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>32</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>15</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>FileName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>FileCount</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>FileSizeInKB</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>
