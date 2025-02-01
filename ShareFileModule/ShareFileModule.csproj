@@ -39,7 +39,7 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Management.Automation" Version="6.1.7601.17515" Condition="'$(TargetFramework)' == 'net48'" />
-	<PackageReference Include="System.Management.Automation" Version="7.4.6" Condition="'$(TargetFramework)' != 'net48'" />
+	<PackageReference Include="System.Management.Automation" Version="7.5.0" Condition="'$(TargetFramework)' != 'net48'" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
