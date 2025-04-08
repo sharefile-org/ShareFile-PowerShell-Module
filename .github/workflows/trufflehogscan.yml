@@ -1,0 +1,9 @@
+name: TruffleHog Scan
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  call-trufflehog-scan:
+    uses: sharefile-org/paas-utilities/.github/workflows/trufflehog-scan.yaml@main
