@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Management.Automation.Runspaces;
+using System.Management.Automation;
 
 namespace Test_ShareFileSnapIn
 {
@@ -12,9 +14,9 @@ namespace Test_ShareFileSnapIn
         private static string _sfFolder = "Folder1Q";
 
         /// <summary>
-        /// C:\sflogin.sfps
+        /// %LOCALAPPDATA%\ShareFile\sflogin.sfps
         /// </summary>
-        public static string LoginFilePath = @"C:\sflogin.sfps";
+        public static string LoginFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ShareFile", "sflogin.sfps");
 
         /// <summary>
         /// sf
@@ -25,20 +27,20 @@ namespace Test_ShareFileSnapIn
         /// </summary>
         public static string ShareFileDrivePath = string.Format("{0}{1}",ShareFileDriveLetter, ":");
         /// <summary>
-        /// sf:/My Files & Folders
+        /// sf:/Personal Folders
         /// </summary>
-        public static string ShareFileHomeFolder = string.Format("{0}{1}", ShareFileDrivePath, "/My Files & Folders");
+        public static string ShareFileHomeFolder = string.Format("{0}{1}", ShareFileDrivePath, "/Personal Folders");
 
         /// <summary>
         /// sf:/Folder1
         /// </summary>
         public static string ShareFileFolder = string.Format("{0}{1}{2}", ShareFileDrivePath, "/", _localFolder);
         /// <summary>
-        /// sf:/My Files & Folders/Folder1Q
+        /// sf:/Personal Folders/Folder1Q
         /// </summary>
         public static string ShareFileFolderUploaded = string.Format("{0}{1}{2}", ShareFileHomeFolder, "/", _sfFolder);
         /// <summary>
-        /// sf:/My Files & Folders/Folder1
+        /// sf:/Personal Folders/Folder1
         /// </summary>
         public static string ShareFileFolderFullPath = string.Format("{0}{1}{2}", ShareFileHomeFolder, "/", _localFolder);
         /// <summary>
@@ -50,28 +52,28 @@ namespace Test_ShareFileSnapIn
         /// </summary>
         public static string ShareFileFileUploaded = string.Format("{0}{1}{2}", ShareFileHomeFolder, "/", _localFile);
         /// <summary>
-        /// sf:/My Files & Folders/DeepText.txt
+        /// sf:/Personal Folders/DeepText.txt
         /// </summary>
         public static string ShareFileFileFullPath = string.Format("{0}{1}{2}", ShareFileHomeFolder, "/", _sfFile);
 
         /// <summary>
-        /// D:\SFTemp
+        /// %LOCALAPPDATA%\ShareFile\SFTemp
         /// </summary>
-        public static string LocalBaseFolder = @"D:\SFTemp";
+        public static string LocalBaseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ShareFile", "SFTemp");
         /// <summary>
-        /// D:\SFTemp\Folder1Q
+        /// %LOCALAPPDATA%\ShareFile\SFTemp\Folder1Q
         /// </summary>
         public static string LocalFolder = string.Format("{0}{1}{2}", LocalBaseFolder, @"\", _sfFolder);
         /// <summary>
-        /// D:\SFTemp\Folder1
+        /// %LOCALAPPDATA%\ShareFile\SFTemp\Folder1
         /// </summary>
         public static string LocalFolderDownloaded = string.Format("{0}{1}{2}", LocalBaseFolder, @"\", _localFolder);
         /// <summary>
-        /// D:\SFTemp\ToUpload.txt
+        /// %LOCALAPPDATA%\ShareFile\SFTemp\ToUpload.txt
         /// </summary>
         public static string LocalFile = string.Format("{0}{1}{2}", LocalBaseFolder, @"\", _localFile);
         /// <summary>
-        /// D:\SFTemp\DeepText.txt
+        /// %LOCALAPPDATA%\ShareFile\SFTemp\DeepText.txt
         /// </summary>
         public static string LocalFileDownloaded = string.Format("{0}{1}{2}", LocalBaseFolder, @"\", _sfFile);
         
@@ -113,6 +115,16 @@ namespace Test_ShareFileSnapIn
                 DirectoryInfo directory = new DirectoryInfo(path);
                 DeleteLocalItemRecursive(directory);
             }
+        }
+
+        public static Runspace OpenRunspace()
+        {
+            const string moduleName = "ShareFile";
+            InitialSessionState initial = InitialSessionState.CreateDefault();
+            initial.ImportPSModule(new string[] { moduleName });
+            var runspace = RunspaceFactory.CreateRunspace(initial);
+            runspace.Open();
+            return runspace;
         }
 
         private static void DeleteLocalItemRecursive(FileSystemInfo source)

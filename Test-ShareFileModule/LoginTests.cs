@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShareFile.Api.Powershell;
 
 namespace Test_ShareFileSnapIn
 {
@@ -16,31 +13,27 @@ namespace Test_ShareFileSnapIn
         [TestInitialize]
         public void InitializeTests()
         {
-            RunspaceConfiguration config = RunspaceConfiguration.Create();
+            runspace = Utils.OpenRunspace();
+        }
 
-            PSSnapInException warning;
-
-            config.AddPSSnapIn("ShareFile", out warning);
-
-            runspace = RunspaceFactory.CreateRunspace(config);
-            runspace.Open();
+        [TestCleanup]
+        public void CleanupTests()
+        {
+            runspace?.Dispose();
+            runspace = null;
         }
 
         [TestMethod]
         public void TM1_0_NewLoginTest()
         {
-            PowerShell ps = PowerShell.Create();
-
-            ps.AddCommand("Add-PSSnapIn");
-            ps.AddArgument("ShareFile");
-
-            Collection<PSObject> psObjects = ps.Invoke();
+            using var ps = PowerShell.Create();
+            ps.Runspace = runspace;
 
             ps.Commands.Clear();
             ps.AddCommand("New-SFClient");
             ps.AddParameter("Name", Utils.LoginFilePath);
 
-            psObjects = ps.Invoke();
+            var psObjects = ps.Invoke();
 
             Assert.AreEqual<int>(1, psObjects.Count);
         }

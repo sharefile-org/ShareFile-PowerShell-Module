@@ -10,7 +10,7 @@ foreach ($contact in $contacts)
     if ($contact.'E-mail Address' -and $contact.'First Name' -and $contact.'Last Name')
     {
         #create contact in ShareFile
-        $user = New-Object ShareFile.Api.Models.User
+        $user = New-Object ShareFile.Api.Client.Models.User
 
         #required fields
         $user.FirstName = $contact.'First Name'

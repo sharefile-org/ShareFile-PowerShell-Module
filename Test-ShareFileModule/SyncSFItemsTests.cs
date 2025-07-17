@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShareFile.Api.Powershell;
 
 namespace Test_ShareFileSnapIn
 {
@@ -17,14 +14,7 @@ namespace Test_ShareFileSnapIn
         [TestInitialize]
         public void InitializeTests()
         {
-            RunspaceConfiguration config = RunspaceConfiguration.Create();
-
-            PSSnapInException warning;
-
-            config.AddPSSnapIn("ShareFile", out warning);
-
-            runspace = RunspaceFactory.CreateRunspace(config);
-            runspace.Open();
+            runspace = Utils.OpenRunspace();
 
             // do login first to start tests
             using (Pipeline pipeline = runspace.CreatePipeline())
@@ -55,6 +45,13 @@ namespace Test_ShareFileSnapIn
                 // Drive is successfully mapped to root folder
                 Assert.AreEqual<int>(1, psObjects.Count);
             }
+        }
+
+        [TestCleanup]
+        public void CleanupTests()
+        {
+            runspace?.Dispose();
+            runspace = null;
         }
 
 
@@ -108,7 +105,7 @@ namespace Test_ShareFileSnapIn
                 Utils.DeleteLocalFolder(Utils.LocalFolderDownloaded);
 
                 Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolder);
+                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolderFullPath);
                 command.Parameters.Add("LocalPath", Utils.LocalBaseFolder);
                 command.Parameters.Add("Download", true);
                 command.Parameters.Add("Recursive", true);
@@ -129,7 +126,7 @@ namespace Test_ShareFileSnapIn
             using (Pipeline pipeline = runspace.CreatePipeline())
             {
                 Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolder);
+                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolderFullPath);
                 command.Parameters.Add("LocalPath", Utils.LocalBaseFolder);
                 command.Parameters.Add("Download", true);
                 command.Parameters.Add("OverWrite", true);
@@ -152,7 +149,7 @@ namespace Test_ShareFileSnapIn
                 Utils.DeleteLocalFolder(Utils.LocalFolderDownloaded);
 
                 Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolder);
+                command.Parameters.Add("ShareFilePath", Utils.ShareFileFolderFullPath);
                 command.Parameters.Add("LocalPath", Utils.LocalBaseFolder);
                 command.Parameters.Add("Download", true);
                 command.Parameters.Add("Move", true);
@@ -195,7 +192,7 @@ namespace Test_ShareFileSnapIn
                 Collection<PSObject> psObjects = pipeline.Invoke();
                 
                 Assert.AreEqual<int>(1, psObjects.Count);
-                Assert.AreEqual("ShareFile.Api.Models.File", psObjects[0].BaseObject.ToString());
+                Assert.AreEqual("ShareFile.Api.Client.Models.File", psObjects[0].BaseObject.ToString());
             }
         }
 

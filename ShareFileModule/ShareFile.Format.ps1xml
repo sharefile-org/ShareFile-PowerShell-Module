@@ -4,7 +4,7 @@
     <View>
       <Name>FolderTableView</Name>
       <ViewSelectedBy>
-        <TypeName>ShareFile.Api.Models.Item</TypeName>
+        <TypeName>ShareFile.Api.Client.Models.Item</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
