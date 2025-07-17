@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShareFile.Api.Powershell;
 
 namespace Test_ShareFileSnapIn
 {
@@ -18,14 +14,7 @@ namespace Test_ShareFileSnapIn
         [TestInitialize]
         public void InitializeTests()
         {
-            RunspaceConfiguration config = RunspaceConfiguration.Create();
-
-            PSSnapInException warning;
-
-            config.AddPSSnapIn("ShareFile", out warning);
-
-            runspace = RunspaceFactory.CreateRunspace(config);
-            runspace.Open();
+            runspace = Utils.OpenRunspace();
 
             // do login first to start tests
             using (Pipeline pipeline = runspace.CreatePipeline())
@@ -56,6 +45,13 @@ namespace Test_ShareFileSnapIn
                 // Drive is successfully mapped to root folder
                 Assert.AreEqual<int>(1, psObjects.Count);
             }
+        }
+
+        [TestCleanup]
+        public void CleanupTests()
+        {
+            runspace?.Dispose();
+            runspace = null;
         }
 
         [TestMethod]
@@ -128,7 +124,7 @@ namespace Test_ShareFileSnapIn
                 Collection<PSObject> psObjects = pipeline.Invoke();
 
                 Assert.AreEqual<int>(1, psObjects.Count);
-                Assert.AreEqual("ShareFile.Api.Models.File", psObjects[0].BaseObject.ToString());
+                Assert.AreEqual("ShareFile.Api.Client.Models.File", psObjects[0].BaseObject.ToString());
             }
         }
 
@@ -160,7 +156,7 @@ namespace Test_ShareFileSnapIn
                 Collection<PSObject> psObjects = pipeline.Invoke();
 
                 Assert.AreEqual<int>(1, psObjects.Count);
-                Assert.AreEqual("ShareFile.Api.Models.File", psObjects[0].BaseObject.ToString());
+                Assert.AreEqual("ShareFile.Api.Client.Models.File", psObjects[0].BaseObject.ToString());
             }
         }
 

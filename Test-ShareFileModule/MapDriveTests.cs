@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShareFile.Api.Powershell;
 
 namespace Test_ShareFileSnapIn
 {
@@ -17,15 +14,7 @@ namespace Test_ShareFileSnapIn
         [TestInitialize]
         public void InitializeTests()
         {
-
-            RunspaceConfiguration config = RunspaceConfiguration.Create();
-            
-            PSSnapInException warning;
-
-            config.AddPSSnapIn("ShareFile", out warning);
-
-            runspace = RunspaceFactory.CreateRunspace(config);
-            runspace.Open();
+             runspace = Utils.OpenRunspace();
 
             // do login first to start tests
             using (Pipeline pipeline = runspace.CreatePipeline())
@@ -41,7 +30,14 @@ namespace Test_ShareFileSnapIn
                 sfLogin = objs[0];
             }
         }
-        
+
+        [TestCleanup]
+        public void CleanupTests()
+        {
+            runspace?.Dispose();
+            runspace = null;
+        }
+
         [TestMethod]
         public void TM1_MapDriveTest()
         {
@@ -72,7 +68,7 @@ namespace Test_ShareFileSnapIn
             Command command = new Command("New-PSDrive");
             command.Parameters.Add("Name", Utils.ShareFileDriveLetter);
             command.Parameters.Add("PSProvider", "ShareFile");
-            command.Parameters.Add("Root", "/My Files & Folders");
+            command.Parameters.Add("Root", "/");
             command.Parameters.Add("Client", sfLogin);
 
             pipeline.Commands.Add(command);
