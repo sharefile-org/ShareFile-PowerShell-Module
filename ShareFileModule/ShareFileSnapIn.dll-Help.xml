@@ -391,7 +391,7 @@ Retrieve a previously saved authentication state</maml:title>
         <command:parameter required="false" position="named">
           <maml:name>Body</maml:name>
           <maml:description/>
-          <command:parameterValue>ShareFile.Api.Models.ODataObject</command:parameterValue>
+          <command:parameterValue>ShareFile.Api.Client.Models.ODataObject</command:parameterValue>
         </command:parameter>
 
         <command:parameter required="false" position="named">
@@ -447,7 +447,7 @@ Retrieve a previously saved authentication state</maml:title>
         <maml:description>
           <maml:para>The HTTP Verb used in the operation: GET, POST, PATCH, PUT or  DELETE.</maml:para>
           <maml:para>GET retrieves elements, and do not perform changes in the API server.</maml:para>
-          <maml:para>POST create new elements or relationships. Most POST operations require a Body, which are generally classes of ShareFile.Api.Models namespace (see examples)</maml:para>
+          <maml:para>POST create new elements or relationships. Most POST operations require a Body, which are generally classes of ShareFile.Api.Client.Models namespace (see examples)</maml:para>
           <maml:para>PUT replaces the current element with a new set of values - most ShareFile Entities do not support this Verb - use PATCH by default instead</maml:para>
           <maml:para>PATCH replaces the attribute values provided in the request Body, but leave unspecified attributes unchanged.</maml:para>
           <maml:para>DELETE removes the Entity</maml:para>
@@ -543,7 +543,7 @@ Retrieve a previously saved authentication state</maml:title>
         <maml:description>
           <maml:para>Request Body for the operation. The request body is usually a single or a list of ShareFile.Api.Model objects. (see examples).</maml:para>
         </maml:description>
-        <command:parametervalue required="true">ShareFile.Api.Models.ODataObject</command:parametervalue>
+        <command:parametervalue required="true">ShareFile.Api.Client.Models.ODataObject</command:parametervalue>
         <dev:type>
           <maml:name></maml:name>
           <maml:uri/>
@@ -609,12 +609,12 @@ Retrieve a previously saved authentication state</maml:title>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>ShareFile.Api.Models.ODataObject</maml:name>
+          <maml:name>ShareFile.Api.Client.Models.ODataObject</maml:name>
           <maml:uri />
           <maml:description>
             <maml:para>
-              All API responses are deserialized into ShareFile.Api.Model classes, sub-types of ShareFile.Api.Models.ODataObject.
-            </maml:para>
+				All API responses are deserialized into ShareFile.Api.Client.Models classes, sub-types of ShareFile.Api.Client.Models.ODataObject.
+			</maml:para>
           </maml:description>
         </dev:type>
       </command:returnValue>
@@ -646,7 +646,7 @@ $client = New-SfClient -Name acme
 Send-SfRequest -Client $c -Verb GET -Entity Users
         </dev:code>
         <dev:remarks>
-          <maml:para>Return a ShareFile.Api.Models.User object containing attributes of the current user</maml:para>
+          <maml:para>Return a ShareFile.Api.Client.Models.User object containing attributes of the current user</maml:para>
         </dev:remarks>
       </command:example>
 
@@ -669,11 +669,11 @@ Create a new object
         </maml:title>
         <maml:introduction/>
         <dev:code>
-$folder = New-Object ShareFile.Api.Models.Folder
-$folder.Name = "Example Folder"
-$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
-Send-SfRequest -Client $c -Verb POST -Uri $homeFolder.url -Body $folder -Cast Folder -Parameters @{ "overwrite"="true" }
-        </dev:code>
+			$folder = New-Object ShareFile.Api.Client.Models.Folder
+			$folder.Name = "Example Folder"
+			$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
+			Send-SfRequest -Client $c -Verb POST -Uri $homeFolder.url -Body $folder -Cast Folder -Parameters @{ "overwrite"="true" }
+		</dev:code>
         <dev:remarks>
           <maml:para>Retrieves the current user home folder using the HomeFolder navigation property; then creates a new folder under that.</maml:para>
         </dev:remarks>
@@ -685,12 +685,12 @@ Updates an object
         </maml:title>
         <maml:introduction/>
         <dev:code>
-$folderUpdate = New-Object ShareFile.Api.Models.Folder
-$folder.Name = "Example Folder 2"
-$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
-$folderTarget = Send-SfRequest -Client $c -Verb GET -Uri $homeFolder.url -Action ByPath -Parameters @{ "path"="/Example Folder" }
-Send-SfRequest -Client $c -Verb PATCH -Uri $folderTarget.url -Body $folderUpdate 
-        </dev:code>
+			$folderUpdate = New-Object ShareFile.Api.Client.Models.Folder
+			$folder.Name = "Example Folder 2"
+			$homeFolder = Send-SfRequest -Client $c -Verb GET -Entity Users -Navigation HomeFolder -Select "Id,url"
+			$folderTarget = Send-SfRequest -Client $c -Verb GET -Uri $homeFolder.url -Action ByPath -Parameters @{ "path"="/Example Folder" }
+			Send-SfRequest -Client $c -Verb PATCH -Uri $folderTarget.url -Body $folderUpdate
+		</dev:code>
         <dev:remarks>
           <maml:para>Updates the element created in Example 3: retrieves the current user home folder; then finds a named folder under that element using the ByPath action. Then sends an update request to the retrieved folder.</maml:para>
         </dev:remarks>

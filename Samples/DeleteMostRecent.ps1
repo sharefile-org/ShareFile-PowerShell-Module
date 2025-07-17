@@ -68,7 +68,7 @@ Function CheckVersions($FolderRoot, $Dateofincident){
              
             # Write-Host "date of upload " $item.creationdate
             # Check if Item is a file
-            if ($item.__type -eq "ShareFile.Api.Models.File"){
+            if ($item.__type -eq "ShareFile.Api.Client.Models.File"){
  
                 # If there are multiple versions and the date of upload was within the 1 day span of infection
                 if (($item.HasMultipleVersions -eq "true") -and ($time.days -le 1)) {
@@ -83,7 +83,7 @@ Function CheckVersions($FolderRoot, $Dateofincident){
             } 
  
             # Item is a Folder; send back to CheckVersions
-            if ($item.__type -eq "ShareFile.Api.Models.Folder"){
+            if ($item.__type -eq "ShareFile.Api.Client.Models.Folder"){
                 $newRoot = Send-SfRequest -client $client -Entity Items -Id $item.id -expand "Children"
                 CheckVersions $newRoot $Dateofincident
             }

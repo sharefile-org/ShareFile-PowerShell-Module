@@ -45,7 +45,7 @@ $fileParent = '{
 
 #Once we have the files we move them
 foreach($file in $files){
-    if ($file.GetType().ToString() -eq "ShareFile.Api.Models.File"){
+    if ($file.GetType().ToString() -eq "ShareFile.Api.Client.Models.File"){
         Send-SfRequest -Client $sfClient -Entity Items -Method PATCH -Id $file.Id.ToString() -BodyText $fileParent
     }
 }
