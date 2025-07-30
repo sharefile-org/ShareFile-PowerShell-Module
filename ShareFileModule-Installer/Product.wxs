@@ -108,6 +108,12 @@
 			<Component>
 				<File Id="NLog.config" Source="$(var.SourceRootPath)\NLog.config"/>
 			</Component>
+			<Component>
+				<File Id="System.Buffers.dll" Source="$(var.SourceRootPath)\System.Buffers.dll"/>
+			</Component>
+			<Component>
+				<File Id="System.Management.Automation.dll" Source="$(var.SourceRootPath)\System.Management.Automation.dll"/>
+			</Component>
 			<ComponentGroupRef Id="WebView2"/>
 		</ComponentGroup>
 

@@ -7,8 +7,8 @@
     <Product>ShareFileModule</Product>
     <Copyright>Copyright © 2025 Progress</Copyright>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWindowsForms>true</UseWindowsForms>
 	<!-- For Dispatcher found in System.Windows.Threading -->
