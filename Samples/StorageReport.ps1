@@ -31,7 +31,7 @@ function GetFileSize($ItemID, $ItemType)
     foreach ($item in $Items.Children)
     {
         #since folders return a 'file size' of all the children ignore unless it is a file
-        if ($item.__type -eq "ShareFile.Api.Client.Models.File")
+        if ($item.GetType().ToString() -eq "ShareFile.Api.Client.Models.File")
         {
             #CREATE A HASTHATBLE WITH ID/NAME
             #LOOKUP WITH PATH AND ADD FROM GET IF NOT THERE SO WE ONLY GET ONCE
@@ -70,7 +70,7 @@ function GetFileSize($ItemID, $ItemType)
         }
 
         #determine type of item and recurse if a folder
-        if ($item.__type -eq "ShareFile.Api.Client.Models.Folder") { GetFileSize $item.Id $ItemType}
+        if ($item.GetType().ToString() -eq "ShareFile.Api.Client.Models.Folder") { GetFileSize $item.Id $ItemType}
     }
 }
 
