@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -59,9 +61,27 @@ namespace ShareFile.Api.Powershell.Browser
 
         private void InitializeWebView2Env(string cacheFolder)
         {
+            var loaderDllPath = GetLoaderDllFolderPath();
+
+            Logger.Instance.Info($"Using path '{loaderDllPath}' for WebView2Loader.dll");
+            CoreWebView2Environment.SetLoaderDllFolderPath(loaderDllPath);
+
             var env = TaskHelper.RunSynchronously(CoreWebView2Environment.CreateAsync(null, cacheFolder, webView2EnvOptions));
 
             TaskHelper.RunSynchronously(webViewBrowser.EnsureCoreWebView2Async(env));
+        }
+
+        private string GetLoaderDllFolderPath()
+        {
+            string parentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string arch = RuntimeInformation.ProcessArchitecture switch
+            {
+                Architecture.X64 => "win-x64",
+                Architecture.X86 => "win-x86",
+                Architecture.Arm64 => "win-arm64",
+                _ => throw new InvalidOperationException($"Architecture {RuntimeInformation.ProcessArchitecture} not supported")
+            };
+            return Path.Combine(parentDir, "runtimes", arch, "native");
         }
 
         private void CoreWebView2_ClientCertificateRequested(object sender, CoreWebView2ClientCertificateRequestedEventArgs e)
@@ -128,7 +148,7 @@ namespace ShareFile.Api.Powershell.Browser
             }
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
             ClearWebView2Cache();
             if (webViewBrowser != null)
@@ -142,7 +162,7 @@ namespace ShareFile.Api.Powershell.Browser
                 webViewBrowser.NavigationStarting -= WebViewBrowser_NavigationStarting;
                 webViewBrowser.NavigationCompleted -= WebViewBrowser_NavigationCompleted;
             }
-            base.OnClosed(e);
+            base.OnFormClosed(e);
         }
     }
 }

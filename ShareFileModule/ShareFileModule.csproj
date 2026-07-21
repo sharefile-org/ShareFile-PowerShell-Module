@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>ShareFile.Api.Powershell</RootNamespace>
-    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net10.0-windows</TargetFrameworks>
     <LangVersion>10.0</LangVersion>
     <AssemblyTitle>ShareFileModule</AssemblyTitle>
     <Product>ShareFileModule</Product>
@@ -32,15 +32,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="ShareFile.Api.Client" Version="4.0.200" />
-    <PackageReference Include="System.Buffers" Version="4.4.0" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Management.Automation" Version="6.1.7601.17515" Condition="'$(TargetFramework)' == 'net48'" />
-	<PackageReference Include="System.Management.Automation" Version="7.4.6" Condition="'$(TargetFramework)' != 'net48'" />
+	<PackageReference Include="System.Management.Automation" Version="7.6.3" Condition="'$(TargetFramework)' != 'net48'" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +103,7 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  <TargetPath>ShareFile.psd1</TargetPath>
 	</ContentWithTargetPath>
-    <None Include="Manifests\ShareFile-Core.psd1"/>
-    <None Include="Manifests\ShareFile.psd1"/>
+    <None Include="Manifests\ShareFile-Core.psd1" />
+    <None Include="Manifests\ShareFile.psd1" />
   </ItemGroup>
 </Project>

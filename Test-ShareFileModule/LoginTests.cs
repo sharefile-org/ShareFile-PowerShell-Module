@@ -51,7 +51,7 @@ namespace Test_ShareFileSnapIn
 
                 Collection<PSObject> psObjects = pipeline.Invoke();
                 Assert.AreEqual<int>(1, psObjects.Count);
-                Assert.AreEqual(psObjects[0].BaseObject.ToString(), "ShareFile.Api.Powershell.PSShareFileClient");
+                Assert.AreEqual("ShareFile.Api.Powershell.PSShareFileClient", psObjects[0].BaseObject.ToString());
             }
         }
 
