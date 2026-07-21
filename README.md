@@ -1,7 +1,7 @@
 ShareFile PowerShell SDK
 ========================
 The ShareFile PowerShell SDK is a PowerShell module that provides support for saving a user login for use in scripts, provides access to the ShareFile API, and also a provider that can be used within PowerShell to map to a ShareFile account.
-<br>There are two modules provided; `ShareFile` and `ShareFile-Core`. The former is for PowerShell 5.X, while the latter is for PowerShell 7.X+.
+<br>There are two modules provided; `ShareFile` and `ShareFile-Core`. The former is for PowerShell 5.X, while the latter is for PowerShell 7.6+.
 
 >NOTE: If looking for the older PowerShell snap-in, it can be found at https://github.com/sharefile-org/ShareFile-PowerShell.
 
@@ -21,7 +21,7 @@ The ShareFile PowerShell SDK is a PowerShell module that provides support for sa
         </td>
         <td>
             <b>System Requirements</b><br>
-The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1" target="_blank">PowerShell 5.x</a> and <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48" target="_blank">Net Framework 4.8+</a>, or <a href="https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4" target="_blank">PowerShell 7.x+</a> and <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0" target="_blank">Net 8.0</a>. In either case, the <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2" target="_blank">WebView2 runtime</a> is also required.
+The PowerShell SDK requires either <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1" target="_blank">PowerShell 5.x</a> and <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48" target="_blank">Net Framework 4.8+</a>, or <a href="https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.6" target="_blank">PowerShell 7.6+</a> and <a href="https://dotnet.microsoft.com/en-us/download/dotnet/10.0" target="_blank">Net 10.0</a>. In either case, the <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2" target="_blank">WebView2 runtime</a> is also required (third number in version should be greater than or equal to 4078; "X.Y.4078.Z")
         </td>
     </tr>
     <tr>
