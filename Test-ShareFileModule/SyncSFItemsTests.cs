@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test_ShareFileSnapIn
 {
@@ -326,37 +327,47 @@ namespace Test_ShareFileSnapIn
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CmdletInvocationException), "Provide only one switch to Upload or Download the files")]
         public void TM21_SyncWithUploadDownloadFlagsTest()
         {
-            using (Pipeline pipeline = runspace.CreatePipeline())
+            var action = () =>
             {
-                Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("ShareFilePath", Utils.ShareFileDrivePath);
-                command.Parameters.Add("LocalPath", Utils.LocalFile);
-                command.Parameters.Add("Upload", true);
-                command.Parameters.Add("Download", true);
+                using (Pipeline pipeline = runspace.CreatePipeline())
+                {
+                    Command command = new Command("Sync-SfItem");
+                    command.Parameters.Add("ShareFilePath", Utils.ShareFileDrivePath);
+                    command.Parameters.Add("LocalPath", Utils.LocalFile);
+                    command.Parameters.Add("Upload", true);
+                    command.Parameters.Add("Download", true);
 
-                pipeline.Commands.Add(command);
+                    pipeline.Commands.Add(command);
 
-                pipeline.Invoke();
-            }
+                    pipeline.Invoke();
+                }
+            };
+            
+            var ex = Assert.ThrowsExactly<CmdletInvocationException>(action);
+            Assert.AreEqual("Provide only one switch to Upload or Download the files", ex.Message);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CmdletInvocationException), "Upload or Download switch must be specified")]
         public void TM22_SyncWithoutUploadDownloadFlagsTest()
         {
-            using (Pipeline pipeline = runspace.CreatePipeline())
+            var action = () =>
             {
-                Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("ShareFilePath", Utils.ShareFileDrivePath);
-                command.Parameters.Add("LocalPath", Utils.LocalFile);
-                
-                pipeline.Commands.Add(command);
+                using (Pipeline pipeline = runspace.CreatePipeline())
+                {
+                    Command command = new Command("Sync-SfItem");
+                    command.Parameters.Add("ShareFilePath", Utils.ShareFileDrivePath);
+                    command.Parameters.Add("LocalPath", Utils.LocalFile);
 
-                pipeline.Invoke();
-            }
+                    pipeline.Commands.Add(command);
+
+                    pipeline.Invoke();
+                }
+            };
+
+            var ex = Assert.ThrowsExactly<CmdletInvocationException>(action);
+            Assert.AreEqual("Upload or Download switch must be specified", ex.Message);
         }
 
         [TestMethod]
@@ -377,19 +388,24 @@ namespace Test_ShareFileSnapIn
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ParameterBindingException), "Cannot process command because of one or more missing mandatory parameters: ShareFilePath.")]
         public void TM24_SyncWithoutShareFilePathTest()
         {
-            using (Pipeline pipeline = runspace.CreatePipeline())
+            var action = () =>
             {
-                Command command = new Command("Sync-SfItem");
-                command.Parameters.Add("LocalPath", Utils.ShareFileFolder);
-                command.Parameters.Add("Download", true);
+                using (Pipeline pipeline = runspace.CreatePipeline())
+                {
+                    Command command = new Command("Sync-SfItem");
+                    command.Parameters.Add("LocalPath", Utils.ShareFileFolder);
+                    command.Parameters.Add("Download", true);
 
-                pipeline.Commands.Add(command);
+                    pipeline.Commands.Add(command);
 
-                pipeline.Invoke();
-            }
+                    pipeline.Invoke();
+                }
+            };
+
+            var ex = Assert.ThrowsExactly<ParameterBindingException>(action);
+            Assert.AreEqual("Cannot process command because of one or more missing mandatory parameters: ShareFilePath.", ex.Message);
         }
 
         [TestMethod]

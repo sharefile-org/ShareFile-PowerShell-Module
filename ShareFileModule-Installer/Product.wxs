@@ -164,16 +164,7 @@
 				<File Id="Microsoft.ApplicationInsights.dll" Source="$(var.SourceRootPathCore)\Microsoft.ApplicationInsights.dll"/>
 			</Component>
 			<Component>
-				<File Id="System.Configuration.ConfigurationManager.dll" Source="$(var.SourceRootPathCore)\System.Configuration.ConfigurationManager.dll"/>
-			</Component>
-			<Component>
-				<File Id="System.Diagnostics.EventLog.dll" Source="$(var.SourceRootPathCore)\System.Diagnostics.EventLog.dll"/>
-			</Component>
-			<Component>
 				<File Id="System.Management.dll" Source="$(var.SourceRootPathCore)\System.Management.dll"/>
-			</Component>
-			<Component>
-				<File Id="System.Security.Cryptography.Pkcs.dll" Source="$(var.SourceRootPathCore)\System.Security.Cryptography.Pkcs.dll"/>
 			</Component>
 			<ComponentGroupRef Id="Core_WebView2"/>
 		</ComponentGroup>
