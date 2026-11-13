@@ -25,8 +25,8 @@
 # 
 # Requirements:
 # PowerShell 5
-# The latest PowerShell SDK for ShareFile: https://github.com/citrix/ShareFile-PowerShell
-# A Superuser for the ShareFile account: https://support.citrix.com/article/CTX208527
+# The latest PowerShell SDK for ShareFile: https://github.com/sharefile-org/ShareFile-PowerShell-Module
+# A Superuser for the ShareFile account: https://docs.sharefile.com/en-us/sharefile/account_settings/security/edit-super-user-group
 #
 # Usage: 
 # .\BackupShareFileAccount.ps1; Backup-ShareFileAccount -Type Shared -Path <LOCAL BACKUP PATH> -Email <ADMIN EMAIL> -Subdomain <ACCOUNT SUBDOMAIN>
